@@ -1,7 +1,8 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const VueClientPlugin = require('vue-server-renderer/client-plugin');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const baseConfig = require('./webpack.config.base');
@@ -11,13 +12,14 @@ const isDev = process.env.NODE_ENV === 'development';
 let config;
 
 const defaultPlugins = [
-  new CleanWebpackPlugin([path.resolve(__dirname, '../dist')]),
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: isDev ? JSON.stringify('development') : JSON.stringify('production')
     }
   }),
-  new HtmlWebpackPlugin()
+  new HtmlWebpackPlugin({
+    template: path.resolve(__dirname, 'template.html')
+  })
 ];
 
 const devServer = {
@@ -27,19 +29,24 @@ const devServer = {
   hot: true,
   overlay: {
     errors: true
+  },
+  historyApiFallback: {
+    index: '/index.html'
   }
 };
 
 if (isDev) {
   config = merge(baseConfig, {
-    mode: 'development',
+    entry: {
+      app: path.resolve(__dirname, '../client/entry-client.js')
+    },
     devtool: '#cheap-module-eval-source-map',
     devServer: devServer,
     module: {
       rules: [
         {
           test: /\.styl(us)?$/,
-          use: ['style-loader', 'css-loader', {
+          use: ['vue-style-loader', 'css-loader', {
             loader: 'postcss-loader',
             options: {
               sourceMap: true
@@ -55,10 +62,8 @@ if (isDev) {
   });
 } else {
   config = merge(baseConfig, {
-    mode: 'production',
     entry: {
-      app: path.resolve(__dirname, '../client/index.js'),
-      vendor: ['vue']
+      app: path.resolve(__dirname, '../client/entry-client.js')
     },
     output: {
       filename: '[name].[chunkhash:8].js'
@@ -81,24 +86,26 @@ if (isDev) {
       rules: [
         {
           test: /\.styl(us)?$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            'css-loader',
-            {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true
-              }
-            },
-            'stylus-loader'
-          ]
+          use: ExtractTextPlugin.extract({
+            fallback: 'vue-style-loader',
+            use: [
+              'css-loader',
+              {
+                loader: 'postcss-loader',
+                options: {
+                  sourceMap: true
+                }
+              },
+              'stylus-loader'
+            ]
+          })
         }
       ]
     },
     plugins: defaultPlugins.concat([
-      new MiniCssExtractPlugin({
-        filename: '[name].[contentHash:8].css'
-      })
+      new CleanWebpackPlugin([path.resolve(__dirname, '../dist')]),
+      new ExtractTextPlugin('style.[chunkhash:8].css'),
+      new VueClientPlugin()
     ])
   });
 }

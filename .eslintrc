@@ -3,5 +3,9 @@
   "plugins": [
     "html"
   ],
-  "parser": "babel-eslint"
+  "parser": "babel-eslint",
+  "rules": {
+    "semi": [2, "always"],
+    "no-new": "off"
+  }
 }

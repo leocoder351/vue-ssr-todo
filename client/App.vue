@@ -2,29 +2,26 @@
   <div id="app">
     <div id="cover">
       <Header />
-      <Todo />
+      <router-view></router-view>
       <Footer />
     </div>
   </div>
 </template>
 
 <script>
-import Header from './layout/Header.vue'
-import Footer from './layout/Footer.jsx'
-import Todo from './views/todo/Todo.vue'
-
-console.log('docs', Header.__docs )
+import Header from './layout/Header.vue';
+import Footer from './layout/Footer.jsx';
 
 export default {
   data () {
     return {
       text: 'abcde'
-    }
+    };
   },
   components: {
-    Header, Footer, Todo
+    Header, Footer
   }
-}
+};
 </script>
 
 <style scoped lang="stylus">

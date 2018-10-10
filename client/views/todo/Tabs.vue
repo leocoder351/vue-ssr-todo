@@ -31,23 +31,23 @@ export default {
   },
   methods: {
     toggleFilter (state) {
-      this.$emit('toggle', state)
+      this.$emit('toggle', state);
     },
     clearAllCompleted () {
-      this.$emit('clearAllCompleted')
+      this.$emit('clearAllCompleted');
     }
   },
   computed: {
     unFinishedTodoLength () {
-      return this.todos.filter(todo => !todo.completed).length
+      return this.todos.filter(todo => !todo.completed).length;
     }
   },
   data () {
     return {
       states: ['all', 'active', 'completed']
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

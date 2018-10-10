@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import Item from './item.vue'
-import Tabs from './tabs.vue'
+import Item from './item.vue';
+import Tabs from './tabs.vue';
 
 export default {
   data () {
@@ -34,64 +34,65 @@ export default {
       id: 0,
       todos: [],
       filter: 'all'
-    }
+    };
   },
   components: {
     Item,
     Tabs
   },
   created () {
-    this.todos = JSON.parse(window.localStorage.getItem('vue-todo-items')) || []
+    // this.todos = JSON.parse(localStorage.getItem('vue-todo-items')) || [];
+    this.todos = [];
     if (this.todos.length === 0) {
-      this.id = 0
+      this.id = 0;
     } else {
-      this.id = this.todos[0].id
+      this.id = this.todos[0].id;
     }
   },
   computed: {
     filteredTodos () {
       if (this.filter === 'all') {
-        return this.todos
+        return this.todos;
       }
-      const completed = this.filter === 'completed'
-      return this.todos.filter(todo => completed === todo.completed)
+      const completed = this.filter === 'completed';
+      return this.todos.filter(todo => completed === todo.completed);
     }
   },
   methods: {
     addTodo (e) {
-      if (e.target.value.trim() === '') return
+      if (e.target.value.trim() === '') return;
       this.todos.unshift({
         id: ++this.id,
         content: e.target.value.trim(),
         completed: false
-      })
-      e.target.value = ''
-      this.updateLocalStorage(this.todos)
+      });
+      e.target.value = '';
+      this.updateLocalStorage(this.todos);
     },
     toggleTodoState (id) {
       this.todos.forEach(todo => {
         if (todo.id === id) {
-          todo.completed = !todo.completed
+          todo.completed = !todo.completed;
         }
-      })
-      this.updateLocalStorage(this.todos)
+      });
+      this.updateLocalStorage(this.todos);
     },
     deleteTodo (id) {
-      this.todos.splice(this.todos.findIndex(todo => todo.id === id), 1)
-      this.updateLocalStorage(this.todos)
+      this.todos.splice(this.todos.findIndex(todo => todo.id === id), 1);
+      this.updateLocalStorage(this.todos);
     },
     clearAllCompleted () {
-      this.todos = this.todos.filter(todo => todo.completed === false)
-      this.updateLocalStorage(this.todos)
+      this.todos = this.todos.filter(todo => todo.completed === false);
+      this.updateLocalStorage(this.todos);
     },
     toggleFilter (state) {
-      this.filter = state
+      this.filter = state;
     },
     updateLocalStorage (todos) {
-      window.localStorage.setItem('vue-todo-items', JSON.stringify(todos))
+      // localStorage.setItem('vue-todo-items', JSON.stringify(todos));
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

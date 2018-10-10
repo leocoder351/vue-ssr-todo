@@ -22,15 +22,15 @@ export default {
   },
   methods: {
     onToggleTodoState () {
-      this.$emit('toggle', this.todo.id)
+      this.$emit('toggle', this.todo.id);
     },
     deleteTodo () {
       // this.$emit 触发del事件，并返回todo.id
       // 往父组件传递 del 方法
-      this.$emit('del', this.todo.id)
+      this.$emit('del', this.todo.id);
     }
   }
-}
+};
 </script>
 
 <style lang="stylus" scoped>

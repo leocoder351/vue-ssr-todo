@@ -5,23 +5,23 @@ const createVueLoaderOptions = require('./vue-loader.config');
 const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
+  mode: process.env.NODE_ENV || 'production',
   target: 'web',
-
-  entry: path.resolve(__dirname, '../client/index.js'),
 
   output: {
     filename: 'bundle.[hash:8].js',
-    path: path.resolve(__dirname, '../dist')
+    path: path.resolve(__dirname, '../dist'),
+    publicPath: '/'
   },
 
   module: {
     rules: [
-      {
-        test: /\.(vue|js|jsx)$/,
-        use: 'eslint-loader',
-        exclude: /node_modules/,
-        enforce: 'pre'
-      },
+      // {
+      //   test: /\.(vue|js|jsx)$/,
+      //   use: 'eslint-loader',
+      //   exclude: /node_modules/,
+      //   enforce: 'pre'
+      // },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
